@@ -25,7 +25,7 @@ Route::post('/links', function (Request $request) {
     return response()->json($link, 201);
 });
 
-Route::put('/links/{id}', function ($id, Request $request) {
+Route::match(['put', 'patch'], '/links/{id}', function ($id, Request $request) {
     $link = Link::find($id);
 
     $link->update($request->all());
