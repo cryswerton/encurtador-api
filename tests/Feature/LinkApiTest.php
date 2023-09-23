@@ -51,7 +51,25 @@ class LinkApiTest extends TestCase
         $this->assertEquals($link['title'], $data['title']);
         $this->assertEquals($link['destination'], $data['destination']);
         $this->assertEquals($link['short_link'], $data['short_link']);
+    }
 
-        
+    public function test_put_link_success()
+    {
+        $link = Link::factory()->create();
+
+        $data = [
+            'title' => 'title update',
+            'destination' => 'destination update',
+            'short_link' => 'short link update',
+        ];
+
+        $response = $this->put("/api/links/{$link->id}", $data);
+
+        $dataResponse = $response->json();
+
+        $response->assertStatus(200);
+        $this->assertEquals($dataResponse['title'], $data['title']);
+        $this->assertEquals($dataResponse['destination'], $data['destination']);
+        $this->assertEquals($dataResponse['short_link'], $data['short_link']);
     }
 }

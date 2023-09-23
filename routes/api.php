@@ -25,6 +25,14 @@ Route::post('/links', function (Request $request) {
     return response()->json($link, 201);
 });
 
+Route::put('/links/{id}', function ($id, Request $request) {
+    $link = Link::find($id);
+
+    $link->update($request->all());
+
+    return response()->json($link);
+});
+
 Route::get('/links/{id}', function ($id) {
     $link = Link::find($id);
     return response()->json($link);
