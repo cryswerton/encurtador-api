@@ -37,4 +37,21 @@ class LinkApiTest extends TestCase
         $response->assertJsonStructure(['created_at']);
         $response->assertJsonStructure(['updated_at']);
     }
+
+    public function test_create_link_success()
+    {
+
+        $link = Link::factory(1)->makeOne()->toArray();
+
+        $response = $this->post("/api/links", $link);
+
+        $data = $response->json();
+
+        $response->assertStatus(201);
+        $this->assertEquals($link['title'], $data['title']);
+        $this->assertEquals($link['destination'], $data['destination']);
+        $this->assertEquals($link['short_link'], $data['short_link']);
+
+        
+    }
 }
