@@ -38,7 +38,7 @@ class LinkApiTest extends TestCase
         $response->assertJsonStructure(['updated_at']);
     }
 
-    public function test_create_link_success()
+    public function test_post_link_success()
     {
 
         $link = Link::factory(1)->makeOne()->toArray();
