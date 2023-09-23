@@ -22,7 +22,7 @@ class LinkApiTest extends TestCase
         $response->assertJsonCount(3);
     }
 
-    public function test_get_single_link_success()
+    public function test_get_link_success()
     {
 
         $link = Link::factory()->create();
@@ -87,5 +87,14 @@ class LinkApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals($dataResponse['title'], $data['title']);
+    }
+
+    public function test_delete_link_success()
+    {
+        $link = Link::factory()->create();
+
+        $response = $this->delete("/api/links/{$link->id}");
+
+        $response->assertStatus(204);
     }
 }
