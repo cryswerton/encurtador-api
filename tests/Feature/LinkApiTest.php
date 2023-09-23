@@ -13,6 +13,7 @@ class LinkApiTest extends TestCase
 
     public function test_get_links_success()
     {
+        $this->withoutExceptionHandling();
 
         $links = Link::factory()->count(3)->create();
 

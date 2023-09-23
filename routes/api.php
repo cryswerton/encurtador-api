@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Link;
+use App\Http\Controllers\LinkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,34 +16,15 @@ use App\Models\Link;
 |
 */
 
-Route::get('/links', function () {
-    return response()->json(Link::all());
-});
+Route::get('/links', [LinkController::class, 'index']);
 
-Route::post('/links', function (Request $request) {
-    $link = Link::create($request->all());
+Route::post('/links', [LinkController::class, 'store']);
 
-    return response()->json($link, 201);
-});
+Route::match(['put', 'patch'], '/links/{id}', [LinkController::class, 'update']);
 
-Route::match(['put', 'patch'], '/links/{id}', function ($id, Request $request) {
-    $link = Link::find($id);
+Route::get('/links/{id}', [LinkController::class, 'show']);
 
-    $link->update($request->all());
-
-    return response()->json($link);
-});
-
-Route::get('/links/{id}', function ($id) {
-    $link = Link::find($id);
-    return response()->json($link);
-});
-
-Route::delete('/links/{id}', function ($id) {
-    $link = Link::find($id);
-    $link->delete();
-    return response()->json([], 204);
-});
+Route::delete('/links/{id}', [LinkController::class, 'destroy']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
