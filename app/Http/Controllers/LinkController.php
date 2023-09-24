@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Link;
+use Illuminate\Support\Facades\Validator;
 
 class LinkController extends Controller
 {
@@ -26,6 +27,18 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'title' => 'required|max:255',
+            'destination' => 'required|max:400',
+            'short_link' => 'required|max:255|unique:links', 
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
         $link = Link::create($request->all());
 
         return response()->json($link, 201);
