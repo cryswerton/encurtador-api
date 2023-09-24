@@ -23,6 +23,13 @@ class LinkApiTest extends TestCase
         $response->assertJsonCount(3);
     }
 
+    public function test_get_links_with_no_content()
+    {
+        $response = $this->getJson('/api/links');
+
+        $response->assertStatus(204);
+    }
+
     public function test_get_link_success()
     {
 

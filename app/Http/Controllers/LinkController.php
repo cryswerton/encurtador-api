@@ -12,7 +12,13 @@ class LinkController extends Controller
      */
     public function index()
     {
-        return response()->json(Link::all());
+        $links = Link::all();
+
+        if ($links->isEmpty()) {
+            return response()->json([], 204);
+        }
+
+        return response()->json($links);
     }
 
     /**
