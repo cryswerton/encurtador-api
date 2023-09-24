@@ -62,11 +62,25 @@ class LinkController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
+    {   
+        // Check if the link exists 
         $link = Link::find($id);
 
         if (!$link) {
             return response()->json(['error' => 'Link not found'], 404);
+        }
+
+        // Validate data
+        $rules = [
+            'title' => 'required|max:255',
+            'destination' => 'required|max:400',
+            'short_link' => 'required|max:255|unique:links', 
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $link->update($request->all());
