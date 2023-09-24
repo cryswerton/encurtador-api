@@ -72,9 +72,9 @@ class LinkController extends Controller
 
         // Validate data
         $rules = [
-            'title' => 'required|max:255',
-            'destination' => 'required|max:400',
-            'short_link' => 'required|max:255|unique:links', 
+            'title' => 'max:255|min:1',
+            'destination' => 'max:400|min:1',
+            'short_link' => 'max:255|unique:links|min:1', 
         ];
 
         $validator = Validator::make($request->all(), $rules);
