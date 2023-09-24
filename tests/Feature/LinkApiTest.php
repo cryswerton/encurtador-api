@@ -133,6 +133,20 @@ class LinkApiTest extends TestCase
         $this->assertEquals($dataResponse['title'], $data['title']);
     }
 
+    public function test_patch_link_not_found()
+    {
+        $data = [
+            'title' => 'title update',
+        ];
+
+        $response = $this->put("/api/links/1", $data);
+
+        $dataResponse = $response->json();
+
+        $response->assertStatus(404);
+        $this->assertNotEmpty($dataResponse['error']);
+    }
+
     public function test_delete_link_success()
     {
         $link = Link::factory()->create();
