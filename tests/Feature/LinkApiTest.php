@@ -46,6 +46,14 @@ class LinkApiTest extends TestCase
         $response->assertJsonStructure(['updated_at']);
     }
 
+    public function test_get_link_not_found()
+    {
+        $response = $this->getJson("/api/links/1");
+
+        $response->assertStatus(404);
+        $response->assertJsonStructure(['error']);
+    }
+
     public function test_post_link_success()
     {
 
