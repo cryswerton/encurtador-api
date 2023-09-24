@@ -65,9 +65,15 @@ class LinkController extends Controller
     {
         $link = Link::find($id);
 
+        if (!$link) {
+            return response()->json(['error' => 'Link not found'], 404);
+        }
+
         $link->update($request->all());
 
-        return response()->json($link);
+        $updatedLink = Link::find($id);
+
+        return response()->json($updatedLink, 200);
     }
 
     /**
