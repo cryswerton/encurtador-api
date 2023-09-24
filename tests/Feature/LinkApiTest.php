@@ -113,4 +113,14 @@ class LinkApiTest extends TestCase
 
         $response->assertStatus(204);
     }
+
+    public function test_delete_link_not_found()
+    {
+        $response = $this->delete("/api/links/1");
+
+        $data = $response->json();
+
+        $response->assertStatus(404);
+        $this->assertNotEmpty($data['error']);
+    }
 }

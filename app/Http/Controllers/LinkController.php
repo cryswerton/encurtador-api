@@ -63,7 +63,14 @@ class LinkController extends Controller
     public function destroy($id)
     {
         $link = Link::find($id);
+
+        if (!$link) {
+            return response()->json(['error' => 'Link not found'], 404);
+        }
+
         $link->delete();
+
         return response()->json([], 204);
     }
+
 }
