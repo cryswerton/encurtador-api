@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Link;
+use App\Models\User;
 
 class LinkApiTest extends TestCase
 {
@@ -14,6 +15,9 @@ class LinkApiTest extends TestCase
     public function test_get_links_success()
     {
         $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
         $links = Link::factory()->count(3)->create();
 
@@ -25,6 +29,9 @@ class LinkApiTest extends TestCase
 
     public function test_get_links_with_no_content()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $response = $this->getJson('/api/links');
 
         $response->assertStatus(204);
@@ -32,6 +39,9 @@ class LinkApiTest extends TestCase
 
     public function test_get_link_success()
     {
+        
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
         $link = Link::factory()->create();
 
@@ -48,6 +58,9 @@ class LinkApiTest extends TestCase
 
     public function test_get_link_not_found()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $response = $this->getJson("/api/links/1");
 
         $response->assertStatus(404);
@@ -56,6 +69,8 @@ class LinkApiTest extends TestCase
 
     public function test_post_link_success()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
 
         $link = Link::factory(1)->makeOne()->toArray();
 
@@ -71,6 +86,9 @@ class LinkApiTest extends TestCase
 
     public function test_post_link_short_link_not_unique()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $link = Link::factory()->create()->toArray();
 
         $response = $this->post("/api/links", $link);
@@ -83,6 +101,9 @@ class LinkApiTest extends TestCase
 
     public function test_put_link_success()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $link = Link::factory()->create();
 
         $data = [
@@ -103,6 +124,9 @@ class LinkApiTest extends TestCase
 
     public function test_put_link_short_link_not_unique()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $link = Link::factory()->create();
 
         $data = [
@@ -121,6 +145,9 @@ class LinkApiTest extends TestCase
 
     public function test_put_link_not_found()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $data = [
             'title' => 'title update',
             'destination' => 'destination update',
@@ -137,6 +164,9 @@ class LinkApiTest extends TestCase
 
     public function test_patch_link_success()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $link = Link::factory()->create();
 
         $data = [
@@ -153,6 +183,9 @@ class LinkApiTest extends TestCase
 
     public function test_patch_link_short_link_not_unique()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $link = Link::factory()->create();
 
         $data = [
@@ -169,6 +202,9 @@ class LinkApiTest extends TestCase
 
     public function test_patch_link_not_found()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $data = [
             'title' => 'title update',
         ];
@@ -183,6 +219,9 @@ class LinkApiTest extends TestCase
 
     public function test_delete_link_success()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
         $link = Link::factory()->create();
 
         $response = $this->delete("/api/links/{$link->id}");
@@ -192,6 +231,9 @@ class LinkApiTest extends TestCase
 
     public function test_delete_link_not_found()
     {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        
         $response = $this->delete("/api/links/1");
 
         $data = $response->json();
