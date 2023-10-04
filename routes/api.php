@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Link;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,16 +17,15 @@ use App\Http\Controllers\LinkController;
 |
 */
 
-Route::get('/links', [LinkController::class, 'index']);
 
-Route::post('/links', [LinkController::class, 'store']);
+// Public routes
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::match(['put', 'patch'], '/links/{id}', [LinkController::class, 'update']);
-
-Route::get('/links/{id}', [LinkController::class, 'show']);
-
-Route::delete('/links/{id}', [LinkController::class, 'destroy']);
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Protected routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/links', [LinkController::class, 'index']);
+    Route::post('/links', [LinkController::class, 'store']);
+    Route::match(['put', 'patch'], '/links/{id}', [LinkController::class, 'update']);
+    Route::get('/links/{id}', [LinkController::class, 'show']);
+    Route::delete('/links/{id}', [LinkController::class, 'destroy']);
 });
