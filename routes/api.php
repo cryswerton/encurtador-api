@@ -28,4 +28,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::match(['put', 'patch'], '/links/{id}', [LinkController::class, 'update']);
     Route::get('/links/{id}', [LinkController::class, 'show']);
     Route::delete('/links/{id}', [LinkController::class, 'destroy']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
