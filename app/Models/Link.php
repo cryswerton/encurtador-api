@@ -11,4 +11,9 @@ class Link extends Model
 
     protected $table = 'links';
     protected $fillable = ['title', 'destination', 'short_link'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

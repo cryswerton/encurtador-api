@@ -19,7 +19,9 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $links = Link::factory()->count(3)->create();
+        $links = Link::factory()->count(3)->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->getJson('/api/links');
 
@@ -43,12 +45,15 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $link = Link::factory()->create();
+        $link = Link::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->getJson("/api/links/{$link->id}");
 
         $response->assertStatus(200);
         $response->assertJsonStructure(['id']);
+        $response->assertJsonStructure(['user_id']);
         $response->assertJsonStructure(['title']);
         $response->assertJsonStructure(['destination']);
         $response->assertJsonStructure(['short_link']);
@@ -82,6 +87,7 @@ class LinkApiTest extends TestCase
         $this->assertEquals($link['title'], $data['title']);
         $this->assertEquals($link['destination'], $data['destination']);
         $this->assertEquals($link['short_link'], $data['short_link']);
+        $this->assertEquals($data['user_id'], $user->id);
     }
 
     public function test_post_link_short_link_not_unique()
@@ -104,7 +110,9 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $link = Link::factory()->create();
+        $link = Link::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $data = [
             'title' => 'title update',
@@ -127,7 +135,9 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $link = Link::factory()->create();
+        $link = Link::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $data = [
             'title' => 'title update',
@@ -167,7 +177,9 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $link = Link::factory()->create();
+        $link = Link::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $data = [
             'title' => 'title update',
@@ -186,7 +198,9 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $link = Link::factory()->create();
+        $link = Link::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $data = [
             'short_link' => $link->short_link,
@@ -222,7 +236,9 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $link = Link::factory()->create();
+        $link = Link::factory()->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->delete("/api/links/{$link->id}");
 

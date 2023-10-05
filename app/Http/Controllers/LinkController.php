@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Link;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class LinkController extends Controller
@@ -13,7 +14,7 @@ class LinkController extends Controller
      */
     public function index()
     {
-        $links = Link::all();
+        $links = Link::where('user_id', Auth::user()->id)->get();
 
         if ($links->isEmpty()) {
             return response()->json([], 204);
@@ -39,7 +40,12 @@ class LinkController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $link = Link::create($request->all());
+        $link = new Link();
+        $link->user_id = Auth::user()->id;
+        $link->title = $request->title;
+        $link->destination = $request->destination;
+        $link->short_link = $request->short_link;
+        $link->save();
 
         return response()->json($link, 201);
     }
@@ -49,7 +55,7 @@ class LinkController extends Controller
      */
     public function show($id)
     {
-        $link = Link::find($id);
+        $link = Link::where('user_id', Auth::user()->id)->where('id', $id)->first();
 
         if (!$link) {
             return response()->json(['error' => 'Link not found'], 404);
@@ -64,7 +70,7 @@ class LinkController extends Controller
     public function update(Request $request, $id)
     {   
         // Check if the link exists 
-        $link = Link::find($id);
+        $link = Link::where('user_id', Auth::user()->id)->where('id', $id)->first();
 
         if (!$link) {
             return response()->json(['error' => 'Link not found'], 404);
@@ -95,7 +101,7 @@ class LinkController extends Controller
      */
     public function destroy($id)
     {
-        $link = Link::find($id);
+        $link = Link::where('user_id', Auth::user()->id)->where('id', $id)->first();
 
         if (!$link) {
             return response()->json(['error' => 'Link not found'], 404);
