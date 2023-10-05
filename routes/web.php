@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Link;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/{slug}', function ($slug) {
+    $link = Link::where('slug', $slug)->first();
+
+    if(!$link){
+        return response([], 404);
+    }
+
+    return redirect($link->destination, 301);
 });
