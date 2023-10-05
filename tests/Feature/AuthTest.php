@@ -50,4 +50,19 @@ class AuthTest extends TestCase
                 'token',
             ]);
     }
+
+    public function testUserLoginWithInvalidCredentials()
+    {
+        $loginData = [
+            'email' => 'nonexistent@example.com',
+            'password' => 'invalidpassword',
+        ];
+
+        $response = $this->post('/api/login', $loginData);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'message' => 'Bad credentials',
+            ]);
+    }
 }
