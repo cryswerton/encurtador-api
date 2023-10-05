@@ -65,4 +65,27 @@ class AuthTest extends TestCase
                 'message' => 'Bad credentials',
             ]);
     }
+
+    public function test_a_user_can_logout()
+    {
+        $user = User::factory()->create();
+
+        $token = $user->createToken('apptoken')->plainTextToken;
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $token,
+        ];
+
+        $response = $this->withHeaders($headers)->post('/api/logout');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Logged out.',
+            ]);
+
+        // Ensure that the user's token has been deleted from the database
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'token' => hash('sha256', $token),
+        ]);
+    }
 }
