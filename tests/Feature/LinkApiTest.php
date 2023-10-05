@@ -86,11 +86,11 @@ class LinkApiTest extends TestCase
         $response->assertStatus(201);
         $this->assertEquals($link['title'], $data['title']);
         $this->assertEquals($link['destination'], $data['destination']);
-        $this->assertEquals($link['short_link'], $data['short_link']);
         $this->assertEquals($data['user_id'], $user->id);
+        $this->assertEquals($data['short_link'], env('APP_URL') . '/' . $data['slug']);
     }
 
-    public function test_post_link_short_link_not_unique()
+    public function test_post_link_title_not_unique()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -102,7 +102,7 @@ class LinkApiTest extends TestCase
         $data = $response->json();
 
         $response->assertStatus(422);
-        $this->assertNotEmpty($data['errors']['short_link']);
+        $this->assertNotEmpty($data['errors']['title']);
     }
 
     public function test_put_link_success()
@@ -117,7 +117,6 @@ class LinkApiTest extends TestCase
         $data = [
             'title' => 'title update',
             'destination' => 'destination update',
-            'short_link' => 'short link update',
         ];
 
         $response = $this->put("/api/links/{$link->id}", $data);
@@ -127,10 +126,9 @@ class LinkApiTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals($dataResponse['title'], $data['title']);
         $this->assertEquals($dataResponse['destination'], $data['destination']);
-        $this->assertEquals($dataResponse['short_link'], $data['short_link']);
     }
 
-    public function test_put_link_short_link_not_unique()
+    public function test_put_link_title_not_unique()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -140,9 +138,8 @@ class LinkApiTest extends TestCase
         ]);
 
         $data = [
-            'title' => 'title update',
+            'title' => $link->title,
             'destination' => 'destination update',
-            'short_link' => $link->short_link,
         ];
 
         $response = $this->put("/api/links/{$link->id}", $data);
@@ -150,7 +147,7 @@ class LinkApiTest extends TestCase
         $dataResponse = $response->json();
 
         $response->assertStatus(422);
-        $this->assertNotEmpty($dataResponse['errors']['short_link']);
+        $this->assertNotEmpty($dataResponse['errors']['title']);
     }
 
     public function test_put_link_not_found()
@@ -193,7 +190,7 @@ class LinkApiTest extends TestCase
         $this->assertEquals($dataResponse['title'], $data['title']);
     }
 
-    public function test_patch_link_short_link_not_unique()
+    public function test_patch_link_title_not_unique()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -203,7 +200,7 @@ class LinkApiTest extends TestCase
         ]);
 
         $data = [
-            'short_link' => $link->short_link,
+            'title' => $link->title,
         ];
 
         $response = $this->put("/api/links/{$link->id}", $data);
@@ -211,7 +208,7 @@ class LinkApiTest extends TestCase
         $dataResponse = $response->json();
 
         $response->assertStatus(422);
-        $this->assertNotEmpty($dataResponse['errors']['short_link']);
+        $this->assertNotEmpty($dataResponse['errors']['title']);
     }
 
     public function test_patch_link_not_found()

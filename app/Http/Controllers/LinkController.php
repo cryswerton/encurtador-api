@@ -6,12 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Link;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class LinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $links = Link::where('user_id', Auth::user()->id)->get();
@@ -23,15 +22,11 @@ class LinkController extends Controller
         return response()->json($links);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $rules = [
-            'title' => 'required|max:255',
-            'destination' => 'required|max:400',
-            'short_link' => 'required|max:255|unique:links', 
+            'title' => 'required|max:255|unique:links',
+            'destination' => 'required|max:400', 
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -40,19 +35,19 @@ class LinkController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        $slug = Str::slug($request->title);
+
         $link = new Link();
         $link->user_id = Auth::user()->id;
         $link->title = $request->title;
+        $link->slug = $slug;
         $link->destination = $request->destination;
-        $link->short_link = $request->short_link;
+        $link->short_link = env('APP_URL') . '/' . $slug;
         $link->save();
 
         return response()->json($link, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $link = Link::where('user_id', Auth::user()->id)->where('id', $id)->first();
@@ -64,9 +59,6 @@ class LinkController extends Controller
         return response()->json($link);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {   
         // Check if the link exists 
@@ -78,9 +70,8 @@ class LinkController extends Controller
 
         // Validate data
         $rules = [
-            'title' => 'max:255|min:1',
+            'title' => 'max:255|unique:links|min:1',
             'destination' => 'max:400|min:1',
-            'short_link' => 'max:255|unique:links|min:1', 
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -96,9 +87,6 @@ class LinkController extends Controller
         return response()->json($updatedLink, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $link = Link::where('user_id', Auth::user()->id)->where('id', $id)->first();
