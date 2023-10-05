@@ -19,14 +19,20 @@ class LinkApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $links = Link::factory()->count(3)->create([
-            'user_id' => $user->id
+        $links = Link::factory()->create([
+            'user_id' => $user->id,
+            'slug' => 'link-test-1',
+        ]);
+
+        $links = Link::factory()->create([
+            'user_id' => $user->id,
+            'slug' => 'link-test-2',
         ]);
 
         $response = $this->getJson('/api/links');
 
         $response->assertStatus(200);
-        $response->assertJsonCount(3);
+        $response->assertJsonCount(2);
     }
 
     public function test_get_links_with_no_content()

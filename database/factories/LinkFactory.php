@@ -15,7 +15,7 @@ class LinkFactory extends Factory
     protected $model = Link::class;
 
     public function definition(): array
-    {
+    {   //fake()->name()
         $slug = 'link-test';
         $shortLink = env('APP_URL') . '/' . $slug;
 
