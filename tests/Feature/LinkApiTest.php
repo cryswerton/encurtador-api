@@ -303,4 +303,19 @@ class LinkApiTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals($dataResponse['clicks'], 0);
     }
+
+    public function test_a_link_can_be_reseted(){
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $link = Link::factory()->create([
+            'user_id' => $user->id,
+            'clicks' => 100,
+        ]);
+
+        $response = $this->get("/api/reset/{$link->id}");
+
+        $response->assertStatus(200);
+        $this->assertEquals($link->refresh()->clicks, 0);
+    }
 }

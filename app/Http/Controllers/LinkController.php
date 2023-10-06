@@ -99,4 +99,18 @@ class LinkController extends Controller
         return response()->json([], 204);
     }
 
+    public function reset($id)
+    {
+        $link = Link::where('user_id', Auth::user()->id)->where('id', $id)->first();
+
+        if (!$link) {
+            return response()->json(['error' => 'Link not found'], 404);
+        }
+
+        $link->clicks = 0;
+        $link->save();
+
+        return response()->json([], 200);
+    }
+
 }
