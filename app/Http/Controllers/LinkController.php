@@ -83,9 +83,7 @@ class LinkController extends Controller
 
         $link->update($request->all());
 
-        $updatedLink = Link::find($id);
-
-        return response()->json($updatedLink, 200);
+        return response()->json($link->refresh(), 200);
     }
 
     public function destroy($id)

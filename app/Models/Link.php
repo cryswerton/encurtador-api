@@ -10,7 +10,8 @@ class Link extends Model
     use HasFactory;
 
     protected $table = 'links';
-    protected $fillable = ['title', 'destination', 'short_link', 'clicks'];
+    protected $fillable = ['title', 'destination', 'short_link'];
+    protected $guarded = ['clicks'];
 
     public function user()
     {

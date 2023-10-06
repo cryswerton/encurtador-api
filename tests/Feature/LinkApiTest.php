@@ -261,4 +261,46 @@ class LinkApiTest extends TestCase
         $response->assertStatus(404);
         $this->assertNotEmpty($data['error']);
     }
+
+    public function test_put_link_clicks_count_not_updated(){
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $link = Link::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $data = [
+            'title' => 'title update',
+            'destination' => 'destination update',
+            'clicks' => 5,
+        ];
+
+        $response = $this->put("/api/links/{$link->id}", $data);
+
+        $dataResponse = $response->json();
+
+        $response->assertStatus(200);
+        $this->assertEquals($dataResponse['clicks'], 0);
+    }
+
+    public function test_patch_link_clicks_count_not_updated(){
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $link = Link::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $data = [
+            'clicks' => 5,
+        ];
+
+        $response = $this->put("/api/links/{$link->id}", $data);
+
+        $dataResponse = $response->json();
+
+        $response->assertStatus(200);
+        $this->assertEquals($dataResponse['clicks'], 0);
+    }
 }
