@@ -14,6 +14,8 @@ class WebTest extends TestCase
 
     public function test_a_link_cannot_be_found()
     {
+        $this->withoutExceptionHandling();
+
         $response = $this->get('/link-slug');
 
         $response->assertStatus(404);

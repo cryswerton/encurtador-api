@@ -16,11 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/{slug}', function ($slug) {
     $link = Link::where('slug', $slug)->first();
-    $link->addClick();
 
     if(!$link){
         return response([], 404);
     }
+
+    $link->addClick();
 
     return redirect($link->destination, 301);
 });
