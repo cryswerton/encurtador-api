@@ -29,4 +29,20 @@ class WebTest extends TestCase
 
         $response->assertStatus(301);
     }
+
+    public function test_the_link_clicks_count_rises()
+    {
+        $user = User::factory()->create();
+
+        $link = Link::factory()->create();
+
+        $response = $this->get('/link-test');
+        $response = $this->get('/link-test');
+        $response = $this->get('/link-test');
+
+        $link->refresh();
+
+        $response->assertStatus(301);
+        $this->assertEquals($link->clicks, 3);
+    }
 }

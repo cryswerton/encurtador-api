@@ -23,6 +23,7 @@ class LinkFactory extends Factory
             'title' => 'Link Test',
             'slug' => $slug,
             'user_id' => User::factory(),
+            'clicks' => 0,
             'destination' => 'http://google.com',
             'short_link' => $shortLink,
         ];

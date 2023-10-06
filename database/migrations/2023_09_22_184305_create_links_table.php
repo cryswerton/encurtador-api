@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable();
             $table->text('destination', 400);
             $table->string('short_link');
-            $table->bigInteger('clicks')->unsigned()->default(0);
+            $table->integer('clicks')->default(0);
             $table->timestamps();
         });
     }

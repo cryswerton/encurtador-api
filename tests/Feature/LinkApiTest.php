@@ -91,6 +91,7 @@ class LinkApiTest extends TestCase
 
         $response->assertStatus(201);
         $this->assertEquals($link['title'], $data['title']);
+        $this->assertEquals($data['clicks'], 0);
         $this->assertEquals($link['destination'], $data['destination']);
         $this->assertEquals($data['user_id'], $user->id);
         $this->assertEquals($data['short_link'], env('APP_URL') . '/' . $data['slug']);

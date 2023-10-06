@@ -41,6 +41,7 @@ class LinkController extends Controller
         $link->user_id = Auth::user()->id;
         $link->title = $request->title;
         $link->slug = $slug;
+        $link->clicks = 0;
         $link->destination = $request->destination;
         $link->short_link = env('APP_URL') . '/' . $slug;
         $link->save();
