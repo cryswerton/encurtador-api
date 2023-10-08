@@ -31,5 +31,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/links/{id}', [LinkController::class, 'destroy']);
     Route::get('/reset/{id}', [LinkController::class, 'reset']);
 
+    Route::get('/token/verify', function(){
+        return response()->json(['message' => 'Token is valid.']);
+    });
+
     Route::post('/logout', [AuthController::class, 'logout']);
 });

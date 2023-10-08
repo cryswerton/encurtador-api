@@ -318,4 +318,15 @@ class LinkApiTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals($link->refresh()->clicks, 0);
     }
+
+    public function test_a_token_can_be_validated(){
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->get("/api/token/verify");
+        $data = $response->json();
+
+        $response->assertStatus(200);
+        $this->assertEquals($data['message'], 'Token is valid.');
+    }
 }
